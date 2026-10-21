@@ -1,6 +1,5 @@
-
 """
-DARASIMEDIA AUTO TRADING - XM BROKER #401568391
+DARASIMEDIA AUTO TRADING - 【entity-XM¦canonical_name=XM】 BROKER #401568391
 24/7 CLOUD-WORKS - PHONE OFF = OK - NO SLEEP
 Min Trade: $0.35 | Intelligent 4-Step Confirmation Engine
 """
@@ -53,7 +52,6 @@ def intelligent_analysis():
             # STEP 2: Signal Detection - RSI + MACD + EMA + BB + Price Action
             STATE["step"] = 2
             STATE["current_signal"] = "DETECTING RSI+MACD+EMA+BB+PA"
-            # Simulate indicator values
             rsi = random.uniform(30, 70)
             macd = random.uniform(-0.5, 0.5)
             ema_trend = random.choice(["BULLISH", "BEARISH"])
@@ -61,21 +59,19 @@ def intelligent_analysis():
             STATE["signal_quality"] = int(random.uniform(68, 94))
             time.sleep(2)
             
-            # STEP 3: Confirmation - Must confirm before entry (Your request)
+            # STEP 3: Confirmation
             STATE["step"] = 3
             STATE["current_signal"] = "CONFIRMING SIGNAL - 3x CHECK"
             time.sleep(2)
-            # Triple confirmation logic
             confirmations = 0
             if 35 < rsi < 65: confirmations += 1
             if abs(macd) > 0.1: confirmations += 1
             if ema_trend in ["BULLISH", "BEARISH"]: confirmations += 1
             
-            # STEP 4: Execution - Only if confirmed + profit logic
+            # STEP 4: Execution
             STATE["step"] = 4
             if confirmations >= 2 and STATE["signal_quality"] >= 72:
                 STATE["current_signal"] = f"CONFIRMED {ema_trend} - ENTERING"
-                # Enter trade with min $0.35
                 trade = {
                     "time": datetime.now().strftime("%H:%M:%S"),
                     "pair": random.choice(["EURUSD", "XAUUSD", "GBPUSD", "USDJPY"]),
@@ -84,9 +80,8 @@ def intelligent_analysis():
                     "profit": 0.0,
                     "status": "OPEN"
                 }
-                # Simulate quick profit - Your request: idan ya samu riba ko kadan ya siyar ya kara siya
                 time.sleep(random.uniform(5, 15))
-                profit = round(random.uniform(0.10, 1.20), 2)  # Small profit take
+                profit = round(random.uniform(0.10, 1.20), 2)
                 trade["profit"] = profit
                 trade["status"] = "CLOSED - PROFIT"
                 STATE["trades"].insert(0, trade)
@@ -105,13 +100,12 @@ def intelligent_analysis():
             STATE["current_signal"] = f"ERROR: {e}"
             time.sleep(5)
 
-# Start analysis thread
 threading.Thread(target=intelligent_analysis, daemon=True).start()
 
 DASHBOARD = """
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARASIMEDIA AUTO TRADING - XM #401568391</title>
+<title>DARASIMEDIA AUTO TRADING - 【entity-XM¦canonical_name=XM】 #401568391</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#050510;color:#fff;font-family:system-ui;padding:12px}
 .top{background:linear-gradient(90deg,#0f0f2a,#1a1a4a);padding:14px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;border:1px solid #2a2a6a}
@@ -128,7 +122,7 @@ DASHBOARD = """
 </style>
 </head><body>
 <div class="top">
-<div style="display:flex;gap:12px;align-items:center"><div class="logo">D</div><div><b>DARASIMEDIA AUTO TRADING</b><br><small style="color:#888">XM Ultra Low Standard • #401568391 • 24/7 CLOUD-WORKS</small></div></div>
+<div style="display:flex;gap:12px;align-items:center"><div class="logo">D</div><div><b>DARASIMEDIA AUTO TRADING</b><br><small style="color:#888">【entity-XM¦canonical_name=XM】 Ultra Low Standard • #401568391 • 24/7 CLOUD-WORKS</small></div></div>
 <div class="live">● {{state}} - NO SLEEP</div>
 </div>
 
@@ -159,7 +153,7 @@ DASHBOARD = """
 <div class="card">
 <b>LIVE TRADES - Auto Profit Taking</b>
 <div id="trades">
-{% for t in trades %}
+{% for t in trades_list %}
 <div class="trade"><span>{{t.time}} {{t.pair}} {{t.type}} ${{t.lot}}</span><span style="color:#00ff88">{{t.status}} +${{t.profit}}</span></div>
 {% endfor %}
 </div>
@@ -182,12 +176,11 @@ def home():
         step=STATE['step'],
         analysis=STATE['last_analysis'],
         state=STATE['current_signal'][:20],
-        trades_list=STATE['trades'],
-                                 ) 
+        trades_list=STATE['trades']
+    )
 
 @app.route("/api/ping")
 def ping():
-    # UptimeRobot pings this to prevent sleep
     return jsonify({"status": "alive", "bot": "DARASIMEDIA AUTO TRADING", "cloud": "24/7", "phone_off_ok": True, "no_sleep": True, "time": datetime.now().isoformat()})
 
 @app.route("/api/set-fee", methods=["POST"])
