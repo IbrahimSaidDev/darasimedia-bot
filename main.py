@@ -183,7 +183,7 @@ def home():
         analysis=STATE['last_analysis'],
         state=STATE['current_signal'][:20],
         trades_list=STATE['trades'],
-        
+                                 ) 
     )
 
 @app.route("/api/status")
