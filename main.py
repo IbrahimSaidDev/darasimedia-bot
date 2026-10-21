@@ -184,11 +184,6 @@ def home():
         state=STATE['current_signal'][:20],
         trades_list=STATE['trades'],
                                  ) 
-    
-
-@app.route("/api/status")
-def status():
-    return jsonify({"bot": CONFIG["name"], "config": CONFIG, "state": STATE})
 
 @app.route("/api/ping")
 def ping():
